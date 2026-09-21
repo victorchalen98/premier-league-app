@@ -31,3 +31,29 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+// Ejemplo de endpoint en tu servidor Express:
+app.get('/api/teams/overview', async (req, res) => {
+  try {
+    // Configura la CDN de Vercel para guardar en caché la respuesta durante 60 segundos (s-maxage)
+    // stale-while-revalidate permite entregar contenido viejo por 30s mientras renueva el caché en segundo plano.
+    res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=30');
+
+    // ... lógica para pedir datos a football-data.org ...
+    
+    return res.json(data);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Exporta la app para que Vercel la ejecute como Serverless Function
+module.exports = app;
+
+// Solo escucha en un puerto si se ejecuta de forma local (fuera de Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Servidor local corriendo en http://localhost:${PORT}`);
+  });
+}
