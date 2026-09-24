@@ -13,7 +13,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [overview, setOverview] = useState(null);
   const [standings, setStandings] = useState(null);
-  const [view, setView] = useState("overview"); // "overview" | "standings"
+  const [view, setView] = useState("standings"); // "overview" | "standings"
 
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [loadingOverview, setLoadingOverview] = useState(false);
