@@ -13,7 +13,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [overview, setOverview] = useState(null);
   const [standings, setStandings] = useState(null);
-  const [view, setView] = useState("standings"); // "overview" | "standings"
+  const [view, setView] = useState("standings");
 
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [loadingOverview, setLoadingOverview] = useState(false);
@@ -31,14 +31,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!selectedId) return;
+    if (view !== "overview" || !selectedId) return;
     setLoadingOverview(true);
     setError(null);
     fetchTeamOverview(selectedId)
       .then(setOverview)
       .catch((err) => setError(err.message))
       .finally(() => setLoadingOverview(false));
-  }, [selectedId]);
+  }, [selectedId, view]);
 
   // La tabla de posiciones no depende del equipo elegido, así que se pide
   // una sola vez, la primera vez que el usuario abre esa pestaña.
@@ -51,7 +51,7 @@ export default function App() {
       .finally(() => setLoadingStandings(false));
   }, [view, standings]);
 
-  function goToTeamFromStandings(teamId) {
+  function showTeamOverview(teamId) {
     setSelectedId(teamId);
     setView("overview");
   }
@@ -60,28 +60,23 @@ export default function App() {
 
   return (
     <div className="layout">
+      <nav className="top-nav" aria-label="Navegación principal">
+        <button
+          className={"top-nav__item" + (view === "standings" ? " top-nav__item--active" : "")}
+          onClick={() => setView("standings")}
+          aria-current={view === "standings" ? "page" : undefined}
+        >
+          Tabla de posiciones
+        </button>
+      </nav>
+
       {loadingTeams ? (
         <p className="status">Cargando equipos…</p>
       ) : (
-        <TeamSelector teams={teams} selectedId={selectedId} onSelect={setSelectedId} />
+        <TeamSelector teams={teams} selectedId={selectedId} onSelect={showTeamOverview} />
       )}
 
       <main className="content">
-        <nav className="tabs" aria-label="Secciones">
-          <button
-            className={"tabs__item" + (view === "overview" ? " tabs__item--active" : "")}
-            onClick={() => setView("overview")}
-          >
-            Resumen
-          </button>
-          <button
-            className={"tabs__item" + (view === "standings" ? " tabs__item--active" : "")}
-            onClick={() => setView("standings")}
-          >
-            Tabla de posiciones
-          </button>
-        </nav>
-
         {error && <p className="status status--error">{error}</p>}
 
         {view === "overview" && (
@@ -112,7 +107,7 @@ export default function App() {
               <StandingsTable
                 table={standings}
                 selectedId={selectedId}
-                onSelectTeam={goToTeamFromStandings}
+                onSelectTeam={showTeamOverview}
               />
             )}
           </>
