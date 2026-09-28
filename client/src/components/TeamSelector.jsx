@@ -1,9 +1,17 @@
 export default function TeamSelector({ teams, selectedId, onSelect }) {
+  const sortedTeams = [...teams].sort((teamA, teamB) =>
+    (teamA.shortName || teamA.name).localeCompare(
+      teamB.shortName || teamB.name,
+      "es",
+      { sensitivity: "base" },
+    ),
+  );
+
   return (
     <nav className="team-selector" aria-label="Selector de equipos">
       <h2 className="team-selector__title">Premier League</h2>
       <ul className="team-selector__list">
-        {teams.map((team) => (
+        {sortedTeams.map((team) => (
           <li key={team.id}>
             <button
               className={
