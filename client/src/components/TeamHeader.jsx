@@ -1,4 +1,4 @@
-export default function TeamHeader({ team }) {
+export default function TeamHeader({ team, position }) {
   return (
     <header className="team-header">
       <img src={team.crest} alt={`Escudo de ${team.name}`} className="team-header__crest" />
@@ -6,6 +6,10 @@ export default function TeamHeader({ team }) {
         <p className="team-header__eyebrow">Club</p>
         <h1 className="team-header__name">{team.name}</h1>
         <dl className="team-header__facts">
+          <div>
+            <dt>Posición</dt>
+            <dd>{position ? `${position}.ª` : "—"}</dd>
+          </div>
           {team.venue && (
             <div>
               <dt>Estadio</dt>

@@ -56,6 +56,8 @@ export default function App() {
     setView("overview");
   }
 
+  const selectedPosition = standings?.find((row) => row.teamId === selectedId)?.position;
+
   return (
     <div className="layout">
       {loadingTeams ? (
@@ -88,7 +90,7 @@ export default function App() {
 
             {overview && !loadingOverview && (
               <>
-                <TeamHeader team={overview.team} />
+                <TeamHeader team={overview.team} position={selectedPosition} />
                 <div className="content__grid">
                   <NextMatchCard team={overview.team} nextMatch={overview.nextMatch} />
                   <HeadToHeadCard
