@@ -1,10 +1,21 @@
-export default function TeamHeader({ team, position }) {
+export default function TeamHeader({ team, position, isFavorite, onToggleFavorite }) {
   return (
     <header className="team-header">
       <img src={team.crest} alt={`Escudo de ${team.name}`} className="team-header__crest" />
       <div>
         <p className="team-header__eyebrow">Club</p>
-        <h1 className="team-header__name">{team.name}</h1>
+        <div className="team-header__title-row">
+          <h1 className="team-header__name">{team.name}</h1>
+          <button
+            className="favorite-button"
+            type="button"
+            onClick={onToggleFavorite}
+            aria-pressed={isFavorite}
+          >
+            <span aria-hidden="true">{isFavorite ? "★" : "☆"}</span>
+            {isFavorite ? "Quitar de Favoritos" : "Añadir a Favoritos"}
+          </button>
+        </div>
         <dl className="team-header__facts">
           <div>
             <dt>Posición</dt>

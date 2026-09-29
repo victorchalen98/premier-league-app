@@ -1,10 +1,14 @@
-export default function TeamSelector({ teams, selectedId, onSelect }) {
+export default function TeamSelector({ teams, selectedId, favoriteTeamId, onSelect }) {
   const sortedTeams = [...teams].sort((teamA, teamB) =>
-    (teamA.shortName || teamA.name).localeCompare(
-      teamB.shortName || teamB.name,
-      "es",
-      { sensitivity: "base" },
-    ),
+    teamA.id === favoriteTeamId
+      ? -1
+      : teamB.id === favoriteTeamId
+        ? 1
+        : (teamA.shortName || teamA.name).localeCompare(
+            teamB.shortName || teamB.name,
+            "es",
+            { sensitivity: "base" },
+          ),
   );
 
   return (
@@ -23,6 +27,11 @@ export default function TeamSelector({ teams, selectedId, onSelect }) {
             >
               <img src={team.crest} alt="" className="team-selector__crest" />
               <span>{team.shortName || team.name}</span>
+              {team.id === favoriteTeamId && (
+                <span className="team-selector__favorite" aria-hidden="true">
+                  ★
+                </span>
+              )}
             </button>
           </li>
         ))}

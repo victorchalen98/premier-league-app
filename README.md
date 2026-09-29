@@ -6,6 +6,7 @@ App para elegir un equipo de la Premier League y ver:
 - Racha de los últimos 5 partidos (W/D/L)
 - Historial cabeza a cabeza contra el próximo rival
 - Tabla de posiciones completa (pestaña aparte, click en un equipo te lleva a su resumen)
+- Permite guardar un equipo favorito, que aparece primero en el selector
 
 Datos vía [football-data.org](https://www.football-data.org/).
 
@@ -69,6 +70,5 @@ Abrí `http://localhost:5173`.
 
 ## Próximos pasos posibles
 
-- Guardar el equipo favorito en localStorage y abrir la app ya con ese seleccionado.
 - Filtros por jornada o por rango de fechas en el historial cabeza a cabeza.
-- Mostrar la posición del equipo directamente en el header del resumen.
+

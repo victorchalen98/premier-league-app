@@ -8,9 +8,21 @@ import TopScorerCard from "./components/TopScorerCard.jsx";
 import HeadToHeadCard from "./components/HeadToHeadCard.jsx";
 import StandingsTable from "./components/StandingsTable.jsx";
 
+const FAVORITE_TEAM_KEY = "premier-league-favorite-team";
+
+function getFavoriteTeamId() {
+  try {
+    const storedId = window.localStorage.getItem(FAVORITE_TEAM_KEY);
+    return storedId ? Number(storedId) : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function App() {
   const [teams, setTeams] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
+  const [favoriteTeamId, setFavoriteTeamId] = useState(null);
   const [overview, setOverview] = useState(null);
   const [standings, setStandings] = useState(null);
   const [view, setView] = useState("standings");
@@ -24,11 +36,28 @@ export default function App() {
     fetchTeams()
       .then((data) => {
         setTeams(data.teams);
-        if (data.teams.length > 0) setSelectedId(data.teams[0].id);
+        const favoriteId = getFavoriteTeamId();
+        const favoriteTeam = data.teams.find((team) => team.id === favoriteId);
+        setFavoriteTeamId(favoriteTeam?.id ?? null);
+        setSelectedId(favoriteTeam?.id ?? data.teams[0]?.id ?? null);
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoadingTeams(false));
   }, []);
+
+  function toggleFavorite(teamId) {
+    const nextFavoriteId = favoriteTeamId === teamId ? null : teamId;
+    setFavoriteTeamId(nextFavoriteId);
+    try {
+      if (nextFavoriteId === null) {
+        window.localStorage.removeItem(FAVORITE_TEAM_KEY);
+      } else {
+        window.localStorage.setItem(FAVORITE_TEAM_KEY, String(nextFavoriteId));
+      }
+    } catch {
+      // El favorito sigue activo durante esta sesión si el almacenamiento está bloqueado.
+    }
+  }
 
   useEffect(() => {
     if (view !== "overview" || !selectedId) return;
@@ -73,7 +102,12 @@ export default function App() {
       {loadingTeams ? (
         <p className="status">Cargando equipos…</p>
       ) : (
-        <TeamSelector teams={teams} selectedId={selectedId} onSelect={showTeamOverview} />
+        <TeamSelector
+          teams={teams}
+          selectedId={selectedId}
+          favoriteTeamId={favoriteTeamId}
+          onSelect={showTeamOverview}
+        />
       )}
 
       <main className="content">
@@ -85,7 +119,12 @@ export default function App() {
 
             {overview && !loadingOverview && (
               <>
-                <TeamHeader team={overview.team} position={selectedPosition} />
+                <TeamHeader
+                  team={overview.team}
+                  position={selectedPosition}
+                  isFavorite={favoriteTeamId === overview.team.id}
+                  onToggleFavorite={() => toggleFavorite(overview.team.id)}
+                />
                 <div className="content__grid">
                   <NextMatchCard team={overview.team} nextMatch={overview.nextMatch} />
                   <HeadToHeadCard
