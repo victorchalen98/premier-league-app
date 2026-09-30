@@ -10,6 +10,29 @@ import StandingsTable from "./components/StandingsTable.jsx";
 
 const FAVORITE_TEAM_KEY = "premier-league-favorite-team";
 
+const TEAM_ACCENTS = {
+  ARS: "var(--team-ars)",
+  AVL: "var(--team-avl)",
+  BOU: "var(--team-bou)",
+  BRE: "var(--team-bre)",
+  BHA: "var(--team-bha)",
+  BUR: "var(--team-bur)",
+  CHE: "var(--team-che)",
+  CRY: "var(--team-cry)",
+  EVE: "var(--team-eve)",
+  FUL: "var(--team-ful)",
+  LEE: "var(--team-lee)",
+  LIV: "var(--team-liv)",
+  MCI: "var(--team-mci)",
+  MUN: "var(--team-mun)",
+  NEW: "var(--team-new)",
+  NFO: "var(--team-nfo)",
+  SUN: "var(--team-sun)",
+  TOT: "var(--team-tot)",
+  WHU: "var(--team-whu)",
+  WOL: "var(--team-wol)",
+};
+
 function getFavoriteTeamId() {
   try {
     const storedId = window.localStorage.getItem(FAVORITE_TEAM_KEY);
@@ -86,9 +109,11 @@ export default function App() {
   }
 
   const selectedPosition = standings?.find((row) => row.teamId === selectedId)?.position;
+  const selectedTeam = teams.find((team) => team.id === selectedId);
+  const accent = TEAM_ACCENTS[selectedTeam?.tla] ?? "var(--pl-purple)";
 
   return (
-    <div className="layout">
+    <div className="layout" style={{ "--color-accent": accent }}>
       <nav className="top-nav" aria-label="Navegación principal">
         <button
           className={"top-nav__item" + (view === "standings" ? " top-nav__item--active" : "")}
