@@ -442,7 +442,7 @@ button {
 .standings__table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 480px;
+  min-width: 850px;
 }
 
 .standings__table th,
@@ -493,6 +493,32 @@ button {
 .standings__points {
   font-weight: 600;
   color: var(--color-accent);
+}
+
+.standings__form {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.standings__form .streak__pill {
+  width: 22px;
+  height: 22px;
+  font-size: 0.7rem;
+}
+
+.standings__next span,
+.standings__next time {
+  display: block;
+  white-space: nowrap;
+}
+
+.standings__next time {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
 }
 
 /* --- Historial cabeza a cabeza --- */

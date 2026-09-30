@@ -16,6 +16,8 @@ export default function StandingsTable({ table, selectedId, onSelectTeam }) {
             <th>PP</th>
             <th>DG</th>
             <th>Pts</th>
+            <th>Racha</th>
+            <th>Siguiente</th>
           </tr>
         </thead>
         <tbody>
@@ -39,6 +41,34 @@ export default function StandingsTable({ table, selectedId, onSelectTeam }) {
               <td>{row.lost}</td>
               <td>{row.goalDifference}</td>
               <td className="standings__points">{row.points}</td>
+              <td>
+                <ol className="standings__form" aria-label="Últimos cinco partidos">
+                  {(row.form || []).slice().reverse().map((match) => (
+                    <li
+                      key={match.matchId}
+                      className={`streak__pill streak__pill--${match.result.toLowerCase()}`}
+                      title={`${match.scoreFor}-${match.scoreAgainst} vs ${match.rival.name}`}
+                    >
+                      {match.result}
+                    </li>
+                  ))}
+                </ol>
+              </td>
+              <td className="standings__next">
+                {row.nextMatch ? (
+                  <>
+                    <span>{row.nextMatch.rival.shortName || row.nextMatch.rival.name}</span>
+                    <time dateTime={row.nextMatch.date}>
+                      {new Intl.DateTimeFormat("es-ES", {
+                        day: "2-digit",
+                        month: "short",
+                      }).format(new Date(row.nextMatch.date))}
+                    </time>
+                  </>
+                ) : (
+                  "—"
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

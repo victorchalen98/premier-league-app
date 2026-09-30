@@ -6,6 +6,7 @@ import {
   getRecentMatches,
   getCompetitionScorers,
   getStandings,
+  getCompetitionMatches,
   getHeadToHead,
 } from "../footballDataClient.js";
 
@@ -34,8 +35,20 @@ router.get("/", async (req, res, next) => {
 // GET /api/teams/standings -> tabla de posiciones completa de la Premier League
 router.get("/standings", async (req, res, next) => {
   try {
-    const data = await getStandings();
+    const [data, competitionMatches] = await Promise.all([
+      getStandings(),
+      getCompetitionMatches(),
+    ]);
     const totalTable = data.standings.find((s) => s.type === "TOTAL");
+    const matchesByTeam = new Map();
+
+    for (const match of competitionMatches.matches || []) {
+      for (const teamId of [match.homeTeam.id, match.awayTeam.id]) {
+        const matches = matchesByTeam.get(teamId) || [];
+        matches.push(match);
+        matchesByTeam.set(teamId, matches);
+      }
+    }
 
     const table = (totalTable?.table || []).map((row) => ({
       position: row.position,
@@ -50,6 +63,26 @@ router.get("/standings", async (req, res, next) => {
       goalsAgainst: row.goalsAgainst,
       goalDifference: row.goalDifference,
       points: row.points,
+      form: (matchesByTeam.get(row.team.id) || [])
+        .filter((match) => match.status === "FINISHED")
+        .sort((a, b) => new Date(b.utcDate) - new Date(a.utcDate))
+        .slice(0, 5)
+        .map((match) => buildResult(match, row.team.id)),
+      nextMatch: (matchesByTeam.get(row.team.id) || [])
+        .filter(
+          (match) =>
+            ["SCHEDULED", "TIMED"].includes(match.status) &&
+            new Date(match.utcDate) >= new Date()
+        )
+        .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate))
+        .map((match) => ({
+          matchId: match.id,
+          date: match.utcDate,
+          matchday: match.matchday,
+          isHome: match.homeTeam.id === row.team.id,
+          rival:
+            match.homeTeam.id === row.team.id ? match.awayTeam : match.homeTeam,
+        }))[0] || null,
     }));
 
     res.json({ table });

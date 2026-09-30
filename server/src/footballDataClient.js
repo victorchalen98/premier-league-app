@@ -18,6 +18,7 @@ export const TTL = {
   MATCHES: 1000 * 60 * 5, // 5 min: próximos partidos / resultados
   SCORERS: 1000 * 60 * 15, // 15 min: es un recurso de toda la competición, se reutiliza para todos los equipos
   STANDINGS: 1000 * 60 * 30, // 30 min: la tabla no cambia mientras no se juegan partidos
+  COMPETITION_MATCHES: 1000 * 60 * 5, // 5 min: calendario y resultados compartidos por todos los equipos
   HEAD_TO_HEAD: 1000 * 60 * 60 * 3, // 3 horas: el historial entre dos equipos no cambia hasta que juegan de nuevo
 };
 
@@ -80,6 +81,12 @@ export function getCompetitionScorers() {
 export function getStandings() {
   return withCache("standings:PL", TTL.STANDINGS, () =>
     get("/competitions/PL/standings")
+  );
+}
+
+export function getCompetitionMatches() {
+  return withCache("matches:competition:PL", TTL.COMPETITION_MATCHES, () =>
+    get("/competitions/PL/matches")
   );
 }
 
