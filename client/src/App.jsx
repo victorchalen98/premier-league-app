@@ -9,6 +9,7 @@ import HeadToHeadCard from "./components/HeadToHeadCard.jsx";
 import StandingsTable from "./components/StandingsTable.jsx";
 
 const FAVORITE_TEAM_KEY = "premier-league-favorite-team";
+const THEME_KEY = "premier-league-theme";
 
 const TEAM_ACCENTS = {
   ARS: "var(--team-ars)",
@@ -42,6 +43,14 @@ function getFavoriteTeamId() {
   }
 }
 
+function getSavedTheme() {
+  try {
+    return window.localStorage.getItem(THEME_KEY) === "dark";
+  } catch {
+    return false;
+  }
+}
+
 export default function App() {
   const [teams, setTeams] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
@@ -49,11 +58,21 @@ export default function App() {
   const [overview, setOverview] = useState(null);
   const [standings, setStandings] = useState(null);
   const [view, setView] = useState("standings");
+  const [isDarkMode, setIsDarkMode] = useState(getSavedTheme);
 
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [loadingOverview, setLoadingOverview] = useState(false);
   const [loadingStandings, setLoadingStandings] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = isDarkMode ? "dark" : "light";
+    try {
+      window.localStorage.setItem(THEME_KEY, isDarkMode ? "dark" : "light");
+    } catch {
+      // El tema sigue activo durante esta sesión si el almacenamiento está bloqueado.
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     fetchTeams()
@@ -121,6 +140,18 @@ export default function App() {
           aria-current={view === "standings" ? "page" : undefined}
         >
           Tabla de posiciones
+        </button>
+        <button
+          className="theme-toggle"
+          type="button"
+          onClick={() => setIsDarkMode((current) => !current)}
+          aria-pressed={isDarkMode}
+          aria-label={`Activar modo ${isDarkMode ? "claro" : "oscuro"}`}
+        >
+          <span className="theme-toggle__switch" aria-hidden="true">
+            <span />
+          </span>
+          Modo oscuro
         </button>
       </nav>
 

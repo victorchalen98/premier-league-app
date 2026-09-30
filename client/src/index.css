@@ -5,6 +5,9 @@
   --color-line: #d8ddda;
   --color-text: #202925;
   --color-text-muted: #68736e;
+  --color-table-header: #e9edeb;
+  --color-row-hover: #f7f8f6;
+  --color-pill-text: #f1f2ef;
   --pl-purple: #37003c;
   --color-accent: var(--pl-purple);
   --team-ars: #c8102e;
@@ -33,6 +36,23 @@
 
   --font-display: "Oswald", sans-serif;
   --font-body: "Inter", sans-serif;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #141b18;
+  --color-surface: #1d2722;
+  --color-surface-raised: #29362f;
+  --color-line: #39483f;
+  --color-text: #edf2ee;
+  --color-text-muted: #aab8af;
+  --color-table-header: #26332c;
+  --color-row-hover: #25332b;
+  --color-pill-text: #ffffff;
+  --color-accent: #ffffff;
+  --color-win: #27824d;
+  --color-draw: #7b8580;
+  --color-loss: #c43d35;
 }
 
 * {
@@ -72,6 +92,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 24px;
   min-height: 58px;
   padding: 0 clamp(20px, 5vw, 56px);
   background: var(--color-surface);
@@ -99,6 +120,60 @@ button {
   border-bottom-color: var(--color-accent);
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.theme-toggle:hover,
+.theme-toggle[aria-pressed="true"] {
+  color: var(--color-text);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+.theme-toggle__switch {
+  width: 36px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--color-line);
+  transition: background 0.15s ease;
+}
+
+.theme-toggle__switch span {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+  transition: transform 0.15s ease;
+}
+
+.theme-toggle[aria-pressed="true"] .theme-toggle__switch {
+  background: var(--color-accent);
+}
+
+:root[data-theme="dark"] .theme-toggle[aria-pressed="true"] .theme-toggle__switch {
+  background: #ffffff;
+}
+
+.theme-toggle[aria-pressed="true"] .theme-toggle__switch span {
+  transform: translateX(16px);
+}
+
 /* --- Sidebar / selector de equipos --- */
 
 .team-selector {
@@ -115,6 +190,11 @@ button {
   letter-spacing: 0.02em;
   margin: 0 12px 20px;
   color: var(--color-accent);
+}
+
+:root[data-theme="dark"] .team-selector__title,
+:root[data-theme="dark"] .standings__points {
+  color: #ffffff;
 }
 
 .team-selector__list {
@@ -356,7 +436,7 @@ button {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.85rem;
-  color: var(--color-bg);
+  color: var(--color-pill-text);
   cursor: default;
 }
 
@@ -457,7 +537,7 @@ button {
   color: var(--color-text-muted);
   font-weight: 500;
   font-size: 0.75rem;
-  background: #e9edeb;
+  background: var(--color-table-header, #e9edeb);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -468,7 +548,7 @@ button {
 }
 
 .standings__row:hover {
-  background: #f7f8f6;
+  background: var(--color-row-hover, #f7f8f6);
 }
 
 .standings__row--active {
