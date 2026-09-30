@@ -1,14 +1,14 @@
 :root {
-  --color-bg: #0b1f17;
-  --color-surface: #122a20;
-  --color-surface-raised: #163325;
-  --color-line: #234a37;
-  --color-text: #f3f6f1;
-  --color-text-muted: #9fb3a8;
-  --color-accent: #d4a537;
-  --color-win: #3fa34d;
-  --color-draw: #7d8f86;
-  --color-loss: #c1443c;
+  --color-bg: #f1f2ef;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f7e9e5;
+  --color-line: #d8ddda;
+  --color-text: #202925;
+  --color-text-muted: #68736e;
+  --color-accent: #cf3e2e;
+  --color-win: #27824d;
+  --color-draw: #7b8580;
+  --color-loss: #c43d35;
 
   --font-display: "Oswald", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -27,7 +27,6 @@ body,
 body {
   margin: 0;
   background: var(--color-bg);
-  background-image: radial-gradient(circle at 15% 0%, #163828 0%, transparent 55%);
   color: var(--color-text);
   font-family: var(--font-body);
   line-height: 1.5;
@@ -56,6 +55,7 @@ button {
   padding: 0 clamp(20px, 5vw, 56px);
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-line);
+  box-shadow: inset 0 3px 0 var(--color-accent);
 }
 
 .top-nav__item {
@@ -114,7 +114,7 @@ button {
   background: transparent;
   border: none;
   border-left: 3px solid transparent;
-  border-radius: 0 6px 6px 0;
+  border-radius: 0 3px 3px 0;
   text-align: left;
   cursor: pointer;
   color: var(--color-text-muted);
@@ -250,8 +250,9 @@ button {
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-line);
-  border-radius: 10px;
+  border-radius: 4px;
   padding: 20px;
+  box-shadow: 0 2px 0 rgb(32 41 37 / 5%);
 }
 
 .card__label {
@@ -413,7 +414,8 @@ button {
 .standings {
   overflow-x: auto;
   border: 1px solid var(--color-line);
-  border-radius: 10px;
+  border-radius: 4px;
+  background: var(--color-surface);
 }
 
 .standings__table {
@@ -434,7 +436,9 @@ button {
   color: var(--color-text-muted);
   font-weight: 500;
   font-size: 0.75rem;
-  background: var(--color-surface);
+  background: #e9edeb;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .standings__row {
@@ -443,12 +447,12 @@ button {
 }
 
 .standings__row:hover {
-  background: var(--color-surface-raised);
+  background: #f7f8f6;
 }
 
 .standings__row--active {
   background: var(--color-surface-raised);
-  box-shadow: inset 3px 0 0 var(--color-accent);
+  box-shadow: inset 4px 0 0 var(--color-accent);
 }
 
 .standings__team {
