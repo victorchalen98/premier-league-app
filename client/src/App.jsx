@@ -62,7 +62,7 @@ export default function App() {
         const favoriteId = getFavoriteTeamId();
         const favoriteTeam = data.teams.find((team) => team.id === favoriteId);
         setFavoriteTeamId(favoriteTeam?.id ?? null);
-        setSelectedId(favoriteTeam?.id ?? data.teams[0]?.id ?? null);
+        setSelectedId(favoriteTeam?.id ?? null);
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoadingTeams(false));
