@@ -56,15 +56,22 @@ export default function StandingsTable({ table, selectedId, onSelectTeam }) {
               </td>
               <td className="standings__next">
                 {row.nextMatch ? (
-                  <>
-                    <span>{row.nextMatch.rival.shortName || row.nextMatch.rival.name}</span>
-                    <time dateTime={row.nextMatch.date}>
-                      {new Intl.DateTimeFormat("es-ES", {
-                        day: "2-digit",
-                        month: "short",
-                      }).format(new Date(row.nextMatch.date))}
-                    </time>
-                  </>
+                  <span
+                    title={new Intl.DateTimeFormat("es-ES", {
+                      dateStyle: "long",
+                    }).format(new Date(row.nextMatch.date))}
+                    aria-label={`Próximo rival: ${row.nextMatch.rival.name}`}
+                  >
+                    {row.nextMatch.rival.crest ? (
+                      <img
+                        src={row.nextMatch.rival.crest}
+                        alt={row.nextMatch.rival.name}
+                        className="standings__next-crest"
+                      />
+                    ) : (
+                      row.nextMatch.rival.shortName || row.nextMatch.rival.name
+                    )}
+                  </span>
                 ) : (
                   "—"
                 )}

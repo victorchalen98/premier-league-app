@@ -511,14 +511,20 @@ button {
 }
 
 .standings__next span,
-.standings__next time {
+.standings__next-crest {
   display: block;
+}
+
+.standings__next span {
+  cursor: help;
   white-space: nowrap;
 }
 
-.standings__next time {
-  color: var(--color-text-muted);
-  font-size: 0.75rem;
+.standings__next-crest {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto;
+  object-fit: contain;
 }
 
 /* --- Historial cabeza a cabeza --- */
